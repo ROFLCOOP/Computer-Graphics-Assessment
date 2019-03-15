@@ -1,4 +1,5 @@
 #include "Satellite.h"
+#include <iostream>
 
 
 Satellite::Satellite(mat4 transform, Planet* parent, float radius, float linearVelocity, float angularVelocity, vec4 colour) : Planet(transform, radius, colour), m_parent(parent), m_angularVelocity(angularVelocity), m_linearVelocity(linearVelocity)
@@ -17,6 +18,8 @@ void Satellite::update()
 {
 	m_transform = glm::rotate(m_transform, m_angularVelocity * 0.01f, vec3(0, 1, 0));
 	m_transform[3] += m_transform[2] * (m_linearVelocity * 0.01f);
+
+	std::cout << "distance from planet: " << glm::distance(getMat()[3], m_parent->getTransform()[3]) << std::endl;
 }
 
 void Satellite::drawGizmo()

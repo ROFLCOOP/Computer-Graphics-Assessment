@@ -5,7 +5,7 @@ int main()
 	Application* theApp = new Application();
 	if (theApp->startup(1280, 720) == true)
 	{
-		while (theApp->update(0.01f) == true)
+		while (theApp->update() == true)
 			theApp->draw();
 		theApp->shutdown();
 	}
