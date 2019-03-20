@@ -35,23 +35,34 @@ bool Application::startup(int windowWidth, int windowHeight)
 
 	Gizmos::create(65535U, 65535U, 65535U, 65535U);
 
-
-
 	// Add code here
-	Planet* sun = new Planet(vec3(0, 0, 0), 1, vec4(1.0f, 0.7f, 0.0f, 1.0f));
-	Satellite* earth = new Satellite(vec3(-3, 0, 0), sun, 0.5f, 5.0f, glm::pi<float>() * 0.5f, vec4(0, 0, 1, 1));
-	Satellite* moon = new Satellite(vec3(-0.75f, 0, 0), earth, 0.25f, 2.5f, glm::pi<float>(), vec4(1, 1, 1, 1));
+
+	m_shader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/simple.vert");
+	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/simple.frag");
+	
+	if (m_shader.link() == false);
+		printf("Shader Error: %s/n", m_shader.getLastError());
+	m_quadMesh.initialiseQuad();
+	m_quadTransform =
+	{
+		10,0,0,0,
+		0,10,0,0,
+		0,0,10,0,
+		0,0,0,1
+	};
+
+	m_positions[0] = vec3(10, 5, 10);
+	m_positions[1] = vec3(-10, 0, -10);
+	m_rotations[0] = quat(vec3(0, -1, 0));
+	m_rotations[1] = quat(vec3(0, 1, 0));
 
 	//edit camera view here
 	//m_view = glm::lookAt(vec3(0, 10, 0), vec3(0), vec3(0, 1, 0));
 	//m_projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f);
-	m_flyCam = new FlyCamera(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f, vec3(10, 10, 10), vec3(0), vec3(0, 1, 0), 5, m_window);
+	m_flyCam = new FlyCamera(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f, vec3(-25, 25, 25), vec3(0), vec3(0, 1, 0), 5, 1, m_window);
 
 	//glfwGetCursorPos
 
-	m_system.push_back(sun);
-	m_system.push_back(earth);
-	m_system.push_back(moon);
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	return true;
 }
@@ -59,10 +70,6 @@ bool Application::startup(int windowWidth, int windowHeight)
 void Application::shutdown()
 {
 	Gizmos::destroy();
-	for (Planet* obj : m_system)
-	{
-		delete obj;
-	}
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
@@ -79,25 +86,26 @@ bool Application::update()
 
 	Gizmos::clear();
 
+
 	//add code here
 
-	mat4 inverted = glm::inverse(m_view);
+	float s = glm::cos(glfwGetTime()) * 0.5f + 0.5f;
+
+	vec3 p = (1.0f - s) * m_positions[0] + s * m_positions[1];
+
+	quat r = glm::slerp(m_rotations[0], m_rotations[1], s);
+
+	mat4 m = glm::translate(p) * glm::toMat4(r);
+
+	//Gizmos::addTransform(m);
+	Gizmos::addAABBFilled(p, vec3(0.5f), vec4(1, 0, 0, 1), &m);
 
 	//m_view[3] += inverted[2] * dt;
 
 	Gizmos::addTransform(glm::mat4(1));
 
-	m_flyCam->update(m_deltaTime);
-
-	for (Planet* planet : m_system)
-	{
-		planet->update();
-	}
-	for (Planet* planet : m_system)
-	{
-		planet->drawGizmo();
-	}
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	m_flyCam->update(m_deltaTime);
 
 	if (!(glfwWindowShouldClose(m_window) == false && glfwGetKey(m_window, GLFW_KEY_ESCAPE) != GLFW_PRESS))
 		return false;
@@ -110,18 +118,25 @@ void Application::draw()
 	vec4 white(1);
 	vec4 black(0, 0, 0, 1);
 
-	for (int i = 0; i < 21; i++)
+	for (int i = 0; i < 99; i++)
 	{
-		Gizmos::addLine(vec3(-10 + i, 0, 10),
-			vec3(-10 + i, 0, -10),
-			i == 10 ? white : black);
+		Gizmos::addLine(vec3(-49 + i, 0, 49),
+			vec3(-49 + i, 0, -49),
+			i == 49 ? white : black);
 
-		Gizmos::addLine(vec3(10, 0, -10 + i),
-			vec3(-10, 0, -10 + i),
-			i == 10 ? white : black);
+		Gizmos::addLine(vec3(49, 0, -49 + i),
+			vec3(-49, 0, -49 + i),
+			i == 49 ? white : black);
 	}
 
 	
+	m_shader.bind();
+
+	auto pvm = m_flyCam->getProjectionView() * m_quadTransform;
+	m_shader.bindUniform("ProjectionViewModel", pvm);
+
+	m_quadMesh.draw();
+
 	Gizmos::draw(m_flyCam->getProjectionView());
 
 	glfwSwapBuffers(m_window);

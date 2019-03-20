@@ -8,7 +8,7 @@ public:
 	Satellite(vec3 position, Planet* parent, float radius, float linearVelocity, float angularVelocity, vec4 colour);
 	~Satellite();
 
-	void update();
+	void update(float dt) override;
 
 	void drawGizmo() override;
 

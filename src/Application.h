@@ -9,10 +9,19 @@
 #include "Satellite.h"
 #include "FlyCamera.h"
 
+#include <Shader.h>
+#include "Mesh.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <gtc/quaternion.hpp>
+#include <gtx/quaternion.hpp>
+#include <gtx/transform.hpp>
+
 using aie::Gizmos;
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
+using glm::quat;
 
 class Application
 {
@@ -27,12 +36,18 @@ public:
 
 protected:
 	GLFWwindow* m_window;
-	mat4 m_view;
-	mat4 m_projection;
+	//mat4 m_view;
+	//mat4 m_projection;
 
-	std::vector<Planet*> m_system;
+	vec3 m_positions[2];
+	quat m_rotations[2];
+
+	aie::ShaderProgram	m_shader;
+	Mesh				m_quadMesh;
+	mat4				m_quadTransform;
 
 	FlyCamera* m_flyCam;
+
 
 	float m_deltaTime = 0;
 	double m_prevTime = 0;

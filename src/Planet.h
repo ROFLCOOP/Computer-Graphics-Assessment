@@ -15,7 +15,7 @@ public:
 	Planet(vec3 position, float radius, vec4 colour);
 	~Planet();
 
-	virtual void update() {}
+	virtual void update(float dt) {}
 	virtual void drawGizmo();
 	virtual mat4 getTransform() const { return m_transform; }
 
