@@ -25,10 +25,13 @@
     <ClInclude Include="Gizmos.h" />
     <ClInclude Include="gl_core_4_4.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Satellite.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -38,9 +41,11 @@
     <ClCompile Include="gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Satellite.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Computer Graphics.rc" />
@@ -103,7 +108,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dep/glm;$(SolutionDir)src;$(SolutionDir)dep/glfw/headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dep/glm;$(Solutiondir)dep/stb;$(SolutionDir)src;$(SolutionDir)dep/glfw/headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
     </ClCompile>
@@ -128,7 +133,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)dep/glm;$(SolutionDir)dep/glfw/headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Solutiondir)dep/stb;$(SolutionDir)src;$(SolutionDir)dep/glm;$(SolutionDir)dep/glfw/headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
     </ClCompile>

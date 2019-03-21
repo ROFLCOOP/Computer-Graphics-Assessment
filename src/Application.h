@@ -9,6 +9,8 @@
 #include "Satellite.h"
 #include "FlyCamera.h"
 
+#include <OBJMesh.h>
+
 #include <Shader.h>
 #include "Mesh.h"
 
@@ -42,12 +44,17 @@ protected:
 	vec3 m_positions[2];
 	quat m_rotations[2];
 
+	aie::ShaderProgram	m_texturedShader;
 	aie::ShaderProgram	m_shader;
-	Mesh				m_quadMesh;
+	Mesh				m_testMesh;
 	mat4				m_quadTransform;
 
 	FlyCamera* m_flyCam;
 
+	aie::Texture m_gridTexture;
+
+	//aie::OBJMesh	m_bunnyMesh;
+	//mat4			m_bunnyTransform;
 
 	float m_deltaTime = 0;
 	double m_prevTime = 0;

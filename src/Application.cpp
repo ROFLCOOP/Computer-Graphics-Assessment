@@ -39,15 +39,30 @@ bool Application::startup(int windowWidth, int windowHeight)
 
 	m_shader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/simple.vert");
 	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/simple.frag");
-	
-	if (m_shader.link() == false);
+
+	if (m_shader.link() == false)
 		printf("Shader Error: %s/n", m_shader.getLastError());
-	m_quadMesh.initialiseQuad();
+
+	m_texturedShader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/textured.vert");
+	m_texturedShader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/textured.frag");
+	
+	if (m_texturedShader.link() == false)
+		printf("Textured Shader Error: %s/n", m_texturedShader.getLastError());
+
+	if (m_gridTexture.load("../data/textures/numbered_grid.tga") == false)
+	{
+		printf("Failed to load texture!\n");
+		return false;
+	}
+
+	m_testMesh.initialiseCylinder(5, 2, 5);
+	//m_testMesh.initialiseCube();
+
 	m_quadTransform =
 	{
-		10,0,0,0,
-		0,10,0,0,
-		0,0,10,0,
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
 		0,0,0,1
 	};
 
@@ -55,13 +70,28 @@ bool Application::startup(int windowWidth, int windowHeight)
 	m_positions[1] = vec3(-10, 0, -10);
 	m_rotations[0] = quat(vec3(0, -1, 0));
 	m_rotations[1] = quat(vec3(0, 1, 0));
+	//
+	
+
+	//if (m_bunnyMesh.load("../data/stanford/bunny.obj") == false)
+	//{
+	//	printf("Bunny Mesh Error!\n");
+	//	return false;
+	//}
+	//
+	//m_bunnyTransform =
+	//{
+	//	0.5f,0,0,0,
+	//	0,0.5f,0,0,
+	//	0,0,0.5f,0,
+	//	0,0,0,1
+	//};
+
 
 	//edit camera view here
 	//m_view = glm::lookAt(vec3(0, 10, 0), vec3(0), vec3(0, 1, 0));
 	//m_projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f);
 	m_flyCam = new FlyCamera(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f, vec3(-25, 25, 25), vec3(0), vec3(0, 1, 0), 5, 1, m_window);
-
-	//glfwGetCursorPos
 
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	return true;
@@ -89,23 +119,27 @@ bool Application::update()
 
 	//add code here
 
-	float s = glm::cos(glfwGetTime()) * 0.5f + 0.5f;
+	//float s = glm::cos(glfwGetTime()) * 0.5f + 0.5f;
+	//
+	//vec3 p = (1.0f - s) * m_positions[0] + s * m_positions[1];
+	//
+	//quat r = glm::slerp(m_rotations[0], m_rotations[1], s);
+	//
+	//mat4 m = glm::translate(p) * glm::toMat4(r);
 
-	vec3 p = (1.0f - s) * m_positions[0] + s * m_positions[1];
-
-	quat r = glm::slerp(m_rotations[0], m_rotations[1], s);
-
-	mat4 m = glm::translate(p) * glm::toMat4(r);
+	
 
 	//Gizmos::addTransform(m);
-	Gizmos::addAABBFilled(p, vec3(0.5f), vec4(1, 0, 0, 1), &m);
+	//Gizmos::addAABBFilled(p, vec3(0.5f), vec4(1, 0, 0, 1), &m);
 
 	//m_view[3] += inverted[2] * dt;
 
 	Gizmos::addTransform(glm::mat4(1));
 
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
 	m_flyCam->update(m_deltaTime);
+	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	if (!(glfwWindowShouldClose(m_window) == false && glfwGetKey(m_window, GLFW_KEY_ESCAPE) != GLFW_PRESS))
 		return false;
@@ -129,13 +163,20 @@ void Application::draw()
 			i == 49 ? white : black);
 	}
 
-	
 	m_shader.bind();
+	//m_texturedShader.bind();
 
 	auto pvm = m_flyCam->getProjectionView() * m_quadTransform;
-	m_shader.bindUniform("ProjectionViewModel", pvm);
 
-	m_quadMesh.draw();
+	assert(m_shader.bindUniform("ProjectionViewModel", pvm));
+
+	//assert(m_texturedShader.bindUniform("diffuseTexture", 0));
+
+	//m_gridTexture.bind(0);
+
+	m_testMesh.draw();
+
+	//m_bunnyMesh.draw();
 
 	Gizmos::draw(m_flyCam->getProjectionView());
 

@@ -1,6 +1,12 @@
 #pragma once
 
 #include <glm.hpp>
+#include <ext.hpp>
+#include <vector>
+
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
 
 class Mesh
 {
@@ -20,11 +26,16 @@ public:
 					unsigned int indexCount = 0,
 					unsigned int* indices = nullptr);
 
+	void initialiseCube();
+	void initialiseCylinder(float radius, float length, unsigned int segments);
+
 	void initialiseQuad();
 
 	virtual void draw();
 
 protected:
+	void rotate(vec2& vec, float angle);
+
 	unsigned int triCount;
 	unsigned int vao, vbo, ibo;
 };

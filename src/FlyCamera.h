@@ -18,6 +18,8 @@ private:
 	float m_sensitivity = 1.0f;
 	vec3 m_up;
 
+	bool m_wasClicked = false;
+
 	GLFWwindow* m_window;
 	vec2 m_mousePos;
 };
