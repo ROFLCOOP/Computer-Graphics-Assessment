@@ -14,27 +14,36 @@ void Mesh::initialise(unsigned int vertexCount,
 					unsigned int indexCount,
 					unsigned int * indices)
 {
+	// make sure mesh is not yet innitialised
 	assert(vao == 0);
 
+	// generate buffers
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);
 
+	// bind vertex array
 	glBindVertexArray(vao);
 
+	// bind vertex buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
+	// fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(Vertex),
 		vertices, GL_STATIC_DRAW);
 
+	// enable first element as position
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
+	// bind indices if provided
 	if (indexCount != 0)
 	{
 		glGenBuffers(1, &ibo);
 
+		// bind vertex buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
+		// fill vertex buffer
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 			indexCount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
@@ -45,6 +54,7 @@ void Mesh::initialise(unsigned int vertexCount,
 		triCount = vertexCount / 3;
 	}
 
+	// unbind buffers
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -91,29 +101,30 @@ void Mesh::initialiseCylinder(float radius, float length, unsigned int segments)
 	std::vector<Vertex> vertices;
 
 	// add the two end center verts (center of circle on each side)
-	vertices.push_back({ vec4(0, 0, length * 0.5f, 0), vec4(0, 1, 0, 0), vec2(0,0) });
-	vertices.push_back({ vec4(0, 0, -(length * 0.5f), 0), vec4(0, 1, 0, 0), vec2(0,0) });
+	Vertex vert1, vert2;
+	vert1.position = vec4(0, 0, length * 0.5f, 1);
+	vert2.position = vec4(0, 0, length * -0.5f, 1);
+	vertices.push_back(vert1);
+	vertices.push_back(vert2);
 
 	// add vetices to each side based on a directional vector that changes every iteration
 	vec2 dir = vec2(0, 1);
 	float angle = (glm::pi<float>() * 2) / segments;
-	for (int i = 0; i < segments; i++)
+	for (unsigned int i = 0; i < segments; i++)
 	{
-		dir = glm::normalize(dir);
-		Vertex fore;
-		Vertex back;
+		//dir = glm::normalize(dir);
+		Vertex fore, back;
 		fore.position = vec4((dir * radius), length * 0.5f, 1);
 		back.position = vec4((dir * radius), -length * 0.5f, 1);
 		vertices.push_back(fore);
 		vertices.push_back(back);
-		//vertices.push_back({vec4((dir * radius), length * 0.5f, 1), vec4(0, 1, 0, 0), vec2(0,0)});
-		//vertices.push_back({vec4((dir * radius), -length * 0.5f, 1), vec4(0, 1, 0, 0), vec2(0,0)});
+
 		rotate(dir, (glm::pi<float>() * 2) / segments);
 	}
 
 	std::vector<unsigned int> indeces;
 	//the following loop populates the index list, focusing on a vertex from each end of the cylinder every iteration
-	for (int i = 2; i < totalVerts; i+=2)
+	for (unsigned int i = 2; i < totalVerts; i+=2)
 	{
 		if (i + 2 == totalVerts) // if the for loop is at the end, it needs to use the first few verts again
 		{
@@ -148,6 +159,8 @@ void Mesh::initialiseCylinder(float radius, float length, unsigned int segments)
 			indeces.push_back(i + 2);
 		}
 	}
+
+
 	initialise(vertices.size(), &vertices[0], indeces.size(), &indeces[0]);
 }
 

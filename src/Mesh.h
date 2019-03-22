@@ -26,8 +26,13 @@ public:
 					unsigned int indexCount = 0,
 					unsigned int* indices = nullptr);
 
+	// create a (1, 1, 1) cube mesh
 	void initialiseCube();
+
+	// cylinder can also  be used for prism by using less segments
 	void initialiseCylinder(float radius, float length, unsigned int segments);
+
+	//void initialisePyramid(float baseSides, float size);
 
 	void initialiseQuad();
 

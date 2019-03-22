@@ -16,6 +16,10 @@ bool Application::startup(int windowWidth, int windowHeight)
 	if (!glfwInit())
 		return false;
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	m_window = glfwCreateWindow(windowWidth, windowHeight, "Computer Graphics", nullptr, nullptr);
 
 	if (m_window == nullptr)
@@ -38,7 +42,7 @@ bool Application::startup(int windowWidth, int windowHeight)
 	// Add code here
 
 	m_shader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/simple.vert");
-	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/simple.frag");
+	m_shader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/colour.frag");
 
 	if (m_shader.link() == false)
 		printf("Shader Error: %s/n", m_shader.getLastError());
@@ -55,7 +59,7 @@ bool Application::startup(int windowWidth, int windowHeight)
 		return false;
 	}
 
-	m_testMesh.initialiseCylinder(5, 2, 5);
+	m_testMesh.initialiseCylinder(2, 8, 5);
 	//m_testMesh.initialiseCube();
 
 	m_quadTransform =
@@ -166,9 +170,9 @@ void Application::draw()
 	m_shader.bind();
 	//m_texturedShader.bind();
 
-	auto pvm = m_flyCam->getProjectionView() * m_quadTransform;
+	auto pvm = m_flyCam->getProjectionView()/*;//*/ * m_quadTransform;
 
-	assert(m_shader.bindUniform("ProjectionViewModel", pvm));
+	m_shader.bindUniform("ProjectionViewModel", pvm);
 
 	//assert(m_texturedShader.bindUniform("diffuseTexture", 0));
 
