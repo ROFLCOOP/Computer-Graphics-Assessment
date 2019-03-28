@@ -46,13 +46,26 @@ protected:
 
 	aie::ShaderProgram	m_texturedShader;
 	aie::ShaderProgram	m_shader;
+	aie::ShaderProgram	m_phongShader;
+
 	Mesh				m_testMesh;
-	mat4				m_quadTransform;
+	mat4				m_objTransform;
 
 	FlyCamera* m_flyCam;
 
 	aie::Texture m_gridTexture;
 
+	struct Light
+	{
+		vec3	direction;
+		vec3	diffuse;
+		vec3	specular;
+	};
+	Light		m_light;
+	vec3		m_ambientLight;
+
+	aie::OBJMesh m_spearMesh;
+	mat4 m_spearTransform;
 	//aie::OBJMesh	m_bunnyMesh;
 	//mat4			m_bunnyTransform;
 

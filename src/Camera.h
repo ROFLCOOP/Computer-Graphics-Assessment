@@ -21,6 +21,7 @@ public:
 	virtual mat4 getView() { return m_viewTransform; }
 	virtual mat4 getProjection() { return m_projectionTransform; }
 	virtual mat4 getProjectionView() { return m_projectionViewTransform; }
+	virtual vec4 getPosition() { return m_worldTransform[3]; }
 
 protected:
 	mat4 m_worldTransform;
