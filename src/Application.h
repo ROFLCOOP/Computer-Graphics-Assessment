@@ -47,6 +47,7 @@ protected:
 	aie::ShaderProgram	m_texturedShader;
 	aie::ShaderProgram	m_shader;
 	aie::ShaderProgram	m_phongShader;
+	aie::ShaderProgram	m_normalMapShader;
 
 	Mesh				m_testMesh;
 	mat4				m_objTransform;
@@ -58,10 +59,11 @@ protected:
 	struct Light
 	{
 		vec3	direction;
+
 		vec3	diffuse;
 		vec3	specular;
 	};
-	Light		m_light;
+	Light		m_light[2];
 	vec3		m_ambientLight;
 
 	aie::OBJMesh m_spearMesh;
@@ -72,5 +74,7 @@ protected:
 	float m_deltaTime = 0;
 	double m_prevTime = 0;
 	double m_curTime = 0;
+
+
 };
 

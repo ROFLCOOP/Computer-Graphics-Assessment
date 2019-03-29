@@ -36,9 +36,9 @@ void FlyCamera::update(float dt)
 
 				std::cout << glm::length(dif) << std::endl;
 				if (dif.x != 0)
-					m_worldTransform = glm::rotate(m_worldTransform, (glm::pi<float>() * 0.15f) * dif.x * 0.01f * m_sensitivity, vec3(m_viewTransform[1]));
+					m_worldTransform = glm::rotate(m_worldTransform, (glm::pi<float>() * 0.15f) * dif.x * dt * m_sensitivity, vec3(m_viewTransform[1]));
 				if (dif.y != 0)
-					m_worldTransform = glm::rotate(m_worldTransform, (glm::pi<float>() * 0.15f) * dif.y * 0.01f * m_sensitivity, vec3(1, 0, 0));
+					m_worldTransform = glm::rotate(m_worldTransform, (glm::pi<float>() * 0.15f) * dif.y * dt * m_sensitivity, vec3(1, 0, 0));
 
 				//if camera rotates pitch too far, it should stop so the player can't turn upside down
 				if (glm::dot(vec3(m_worldTransform[1]), vec3(0, 1, 0)) < 0)
@@ -48,14 +48,15 @@ void FlyCamera::update(float dt)
 
 					if (dir < 0)
 					{
-						m_worldTransform = glm::rotate(m_worldTransform, glm::pi<float>() * 0.5f * (scale), vec3(1, 0, 0));
+						m_worldTransform = glm::rotate(m_worldTransform, glm::pi<float>() * 0.5f * scale, vec3(1, 0, 0));
 					}
 					else
 					{
-						m_worldTransform = glm::rotate(m_worldTransform, glm::pi<float>() * -0.5f * (scale), vec3(1, 0, 0));
+						m_worldTransform = glm::rotate(m_worldTransform, glm::pi<float>() * -0.5f * scale, vec3(1, 0, 0));
 					}
 				}
 			}
+
 			float speedScale = 1;
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 				speedScale = 3;
