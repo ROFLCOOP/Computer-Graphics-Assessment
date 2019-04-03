@@ -104,12 +104,12 @@ bool Application::startup(int windowWidth, int windowHeight)
 		0,0,0,1
 	};
 
-	m_lightOne.diffuse = { 2, 2, 0 };
-	m_lightOne.specular = { 2, 2, 0 };
-	m_lightTwo.diffuse = { 1, 0, 0 };
-	m_lightTwo.specular = { 1, 0, 0 };
-	m_lightTwo.direction = {0, 0, 1};
-	m_ambientLight = { 1, 1, 1 };
+	m_lightOne.diffuse =  { 0, 0, 3 };
+	m_lightOne.specular = { 0, 0, 3 };
+	m_lightTwo.diffuse =  { 2, 0, 0 };
+	m_lightTwo.specular = { 2, 0, 0 };
+	//m_lightOne.direction = {0, 1, 1};
+	m_ambientLight = { 0.25f, 0.25f, 0.25f };
 
 	//edit camera view here
 	m_flyCam = new FlyCamera(glm::pi<float>() * 0.25f, 16 / 9.0f, 0.1f, 1000.0f, vec3(-25, 25, 25), vec3(0), vec3(0, 1, 0), 5, 1, m_window);
@@ -133,8 +133,12 @@ bool Application::update()
 	m_deltaTime = m_curTime - m_prevTime;
 	m_prevTime = m_curTime;
 	
-	m_lightOne.direction = glm::normalize(vec3(glm::cos(m_curTime * 2), 
-											glm::sin(m_curTime * 2), 0));
+	float pos = glm::cos(m_curTime * 10);
+
+	m_lightOne.direction = glm::normalize(vec3(-pos, 
+											1, -1));
+	m_lightTwo.direction = glm::normalize(vec3(pos,
+											1, -1));
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -176,8 +180,9 @@ void Application::draw()
 	//m_texturedShader.bind();
 	m_normalMapShader.bind();
 
-	m_normalMapShader.bindUniform("cameraPosition", m_flyCam->getPosition());
-	m_normalMapShader.bindUniform("ModelMatrix", m_spearTransform);
+	//m_normalMapShader.bindUniform("cameraPosition", m_flyCam->getPosition());
+	m_normalMapShader.bindUniform("cameraFacing", vec3(m_flyCam->getWorldTransform()[2]));
+	//m_normalMapShader.bindUniform("ModelMatrix", m_spearTransform);
 
 	m_normalMapShader.bindUniform("dirLight1", m_lightOne.light);
 	m_normalMapShader.bindUniform("dirLight2", m_lightTwo.light);

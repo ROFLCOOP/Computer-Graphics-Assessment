@@ -1,6 +1,5 @@
 #version 410
 
-in vec4 vPosition;
 in vec3 vNormal;
 in vec3 vTangent;
 in vec3 vBiTangent;
@@ -14,7 +13,8 @@ uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D normalTexture;
 
-uniform vec3 cameraPosition;
+//uniform vec3 cameraPosition;
+uniform vec3 cameraFacing;
 
 uniform vec3 Ia; // ambient light colour
 uniform vec3 LightDirection;
@@ -57,8 +57,9 @@ void main()
 	
 	float lambertTerm = max( 0, min( 1, dot( N, -L )));
 	
-	vec3 result = CalcDirLight(dirLight1, vNormal, lambertTerm);
-	result += CalcDirLight(dirLight2, vNormal, lambertTerm);
+	
+	vec3 result = CalcDirLight(dirLight1, N, cameraFacing);
+	result = result + CalcDirLight(dirLight2, N, cameraFacing);
 	
 	FragColour = vec4( result, 1);
 }
