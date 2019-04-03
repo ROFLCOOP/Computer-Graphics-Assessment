@@ -58,12 +58,20 @@ protected:
 
 	struct Light
 	{
-		vec3	direction;
-
-		vec3	diffuse;
-		vec3	specular;
+		union
+		{
+			struct
+			{
+				vec3	direction;
+				vec3	diffuse;
+				vec3	specular;
+			};
+			vec3	info[3];
+			glm::mat3 light;
+		};
 	};
-	Light		m_light[2];
+	Light		m_lightOne;
+	Light		m_lightTwo;
 	vec3		m_ambientLight;
 
 	aie::OBJMesh m_spearMesh;
