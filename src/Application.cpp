@@ -42,29 +42,6 @@ bool Application::startup(int windowWidth, int windowHeight)
 
 	// Add code here
 
-	//m_shader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/simple.vert");
-	//m_shader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/simple.frag");
-
-	//if (m_shader.link() == false)
-	//	printf("Shader Error: %s/n", m_shader.getLastError());
-
-	//m_texturedShader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/textured.vert");
-	//m_texturedShader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/textured.frag");
-	
-	//if (m_texturedShader.link() == false)
-	//{
-	//	printf("Textured Shader Error: %s/n", m_texturedShader.getLastError());
-	//	return false;
-	//}
-
-	//m_phongShader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/phong.vert");
-	//m_phongShader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/phong.frag");
-	//
-	//if (m_phongShader.link() == false)
-	//{
-	//	printf("phong shader error: %s\n", m_phongShader.getLastError());
-	//}
-
 	m_normalMapShader.loadShader(aie::eShaderStage::VERTEX, "../data/shaders/normalmap.vert");
 	m_normalMapShader.loadShader(aie::eShaderStage::FRAGMENT, "../data/shaders/multilight.frag");
 
@@ -79,11 +56,7 @@ bool Application::startup(int windowWidth, int windowHeight)
 		printf("Soulspear Mesh Error!\n");
 		return false;
 	}
-	//if (m_gridTexture.load("../data/textures/numbered_grid.tga") == false)
-	//{
-	//	printf("Failed to load texture!\n");
-	//	return false;
-	//}
+	
 	m_spearTransform =
 	{
 		10,0,0,0,
@@ -92,9 +65,6 @@ bool Application::startup(int windowWidth, int windowHeight)
 		0,0,0,1
 	};
 
-	//m_testMesh.initialiseQuad();
-	//m_testMesh.initialiseCube();
-	//m_testMesh.initialiseCylinder(2, 5, 10);
 
 	m_objTransform =
 	{
@@ -108,7 +78,6 @@ bool Application::startup(int windowWidth, int windowHeight)
 	m_lightOne.specular = { 0, 0, 3 };
 	m_lightTwo.diffuse =  { 2, 0, 0 };
 	m_lightTwo.specular = { 2, 0, 0 };
-	//m_lightOne.direction = {0, 1, 1};
 	m_ambientLight = { 0.25f, 0.25f, 0.25f };
 
 	//edit camera view here
@@ -176,21 +145,13 @@ void Application::draw()
 			i == 49 ? white : black);
 	}
 
-	//m_shader.bind();
-	//m_texturedShader.bind();
 	m_normalMapShader.bind();
-
-	//m_normalMapShader.bindUniform("cameraPosition", m_flyCam->getPosition());
 	m_normalMapShader.bindUniform("cameraFacing", vec3(m_flyCam->getWorldTransform()[2]));
-	//m_normalMapShader.bindUniform("ModelMatrix", m_spearTransform);
 
 	m_normalMapShader.bindUniform("dirLight1", m_lightOne.light);
 	m_normalMapShader.bindUniform("dirLight2", m_lightTwo.light);
 
 	m_normalMapShader.bindUniform("Ia", m_ambientLight);
-	//m_normalMapShader.bindUniform("Id", m_light.diffuse);
-	//m_normalMapShader.bindUniform("Is", m_light.specular);
-	//m_normalMapShader.bindUniform("LightDirection", m_light.direction);
 
 
 	auto pvm = m_flyCam->getProjectionView() * m_spearTransform;
@@ -198,17 +159,9 @@ void Application::draw()
 
 	m_normalMapShader.bindUniform("NormalMatrix",
 		glm::inverseTranspose(glm::mat3(m_spearTransform)));
-	//m_texturedShader.bindUniform("ProjectionViewModel", pvm);
-
-	//assert(m_texturedShader.bindUniform("diffuseTexture", 0));
-
-	//m_gridTexture.bind(0);
 
 
 	m_spearMesh.draw();
-	//m_testMesh.draw();
-
-	//m_bunnyMesh.draw();
 
 	Gizmos::draw(m_flyCam->getProjectionView());
 

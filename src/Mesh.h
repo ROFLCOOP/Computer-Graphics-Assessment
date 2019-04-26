@@ -42,6 +42,8 @@ public:
 	virtual void draw();
 
 protected:
+
+	// the passed in vector is rotated by the given angle (radians)
 	void rotate(vec2& vec, float angle);
 
 	unsigned int triCount;

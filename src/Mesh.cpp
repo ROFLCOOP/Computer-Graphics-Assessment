@@ -66,15 +66,6 @@ void Mesh::initialise(unsigned int vertexCount,
 
 void Mesh::initialiseCube()
 {
-	//Vertex vertices[8];
-	//vertices[0] = { glm::normalize(vec4(1, 1, 1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[1] = { glm::normalize(vec4(1, -1, 1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[2] = { glm::normalize(vec4(-1, -1, 1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[3] = { glm::normalize(vec4(-1, 1, 1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[4] = { glm::normalize(vec4(1, 1, -1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[5] = { glm::normalize(vec4(1, -1, -1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[6] = { glm::normalize(vec4(-1, -1, -1, 1)), vec4(0,0,1,0), vec2(0,0) };
-	//vertices[7] = { glm::normalize(vec4(-1, 1, -1, 1)), vec4(0,0,1,0), vec2(0,0) };
 
 	std::vector<Vertex> vertices;
 	vertices.push_back({ glm::normalize(vec4(1, 1, 1, 1)), vec4(0,0,1,0), vec2(0,0) });
@@ -116,7 +107,6 @@ void Mesh::initialiseCylinder(float radius, float length, unsigned int segments)
 	float angle = (glm::pi<float>() * 2) / segments;
 	for (unsigned int i = 0; i < segments; i++)
 	{
-		//dir = glm::normalize(dir);
 		Vertex fore, back;
 		fore.position = vec4((dir * radius), length * 0.5f, 1);
 		back.position = vec4((dir * radius), -length * 0.5f, 1);
