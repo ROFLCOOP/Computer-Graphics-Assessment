@@ -34,8 +34,6 @@ public:
 	// cylinder can also  be used for prism by using less segments
 	void initialiseCylinder(float radius, float length, unsigned int segments);
 
-	//void initialisePyramid(float baseSides, float size);
-
 	//create a small 2D square at global 0
 	void initialiseQuad();
 

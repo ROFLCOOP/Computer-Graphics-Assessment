@@ -145,21 +145,17 @@ void Application::draw()
 			i == 49 ? white : black);
 	}
 
+	// the following is for passing information to the shader
 	m_normalMapShader.bind();
 	m_normalMapShader.bindUniform("cameraFacing", vec3(m_flyCam->getWorldTransform()[2]));
-
 	m_normalMapShader.bindUniform("dirLight1", m_lightOne.light);
 	m_normalMapShader.bindUniform("dirLight2", m_lightTwo.light);
-
 	m_normalMapShader.bindUniform("Ia", m_ambientLight);
-
-
 	auto pvm = m_flyCam->getProjectionView() * m_spearTransform;
 	m_normalMapShader.bindUniform("ProjectionViewModel", pvm);
-
 	m_normalMapShader.bindUniform("NormalMatrix",
 		glm::inverseTranspose(glm::mat3(m_spearTransform)));
-
+	//
 
 	m_spearMesh.draw();
 
