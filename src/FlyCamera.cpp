@@ -14,11 +14,6 @@ FlyCamera::~FlyCamera()
 {
 }
 
-
-// at some point this function should centre the mouse in the middle of the
-//window (as long as the window is clicked). On the first frame the window is
-//clicked, the change in mouse pos should not be applied to the camera.
-//Try prev/current style.
 void FlyCamera::update(float dt)
 {
 	//camera is only moveable while pressing the left mouse button

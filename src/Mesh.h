@@ -11,6 +11,7 @@ using glm::vec4;
 class Mesh
 {
 public:
+	// all member variables are set to 0, meaning the mesh is uninitialised
 	Mesh() : triCount(0), vao(0), vbo(0), ibo(0) {}
 	virtual~Mesh();
 
@@ -21,6 +22,7 @@ public:
 		glm::vec2 texCoord;
 	};
 
+	//pass the vertex information to the gpu to draw a mesh
 	void initialise(unsigned int vertexCount,
 					const Vertex* vertices,
 					unsigned int indexCount = 0,
@@ -34,6 +36,7 @@ public:
 
 	//void initialisePyramid(float baseSides, float size);
 
+	//create a small 2D square at global 0
 	void initialiseQuad();
 
 	virtual void draw();

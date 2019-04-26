@@ -11,9 +11,6 @@ Camera::Camera(float fov, float aspectRatio, float nearF, float farF, vec3 from,
 	m_worldTransform = glm::inverse(m_viewTransform);
 }
 
-Camera::~Camera()
-{
-}
 
 void Camera::setPerspective(float fov, float aspectRatio, float near, float far)
 {

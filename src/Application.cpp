@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "Texture.h"
-
+#include <iostream>
 
 
 Application::Application()
